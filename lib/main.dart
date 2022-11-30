@@ -1,5 +1,7 @@
+import 'package:bloc/bloc.dart';
+import 'package:bloc_course_testing/step_2/step_2_bloc_example.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc_random_name.dart';
 
 void main() {
@@ -17,7 +19,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: const RandomNameBloc(),
+      home: BlocProvider(
+        create: (_) => PersonsBloc(),
+        child: Step2Example(),
+      ),
     );
   }
 }

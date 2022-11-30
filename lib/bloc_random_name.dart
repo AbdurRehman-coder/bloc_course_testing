@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
@@ -7,18 +6,14 @@ import 'dart:math' as math show Random;
 
 import 'package:flutter/material.dart';
 
-List<String> names = [
-  'Foo',
-  'Bar',
-  'Baz'
-];
+List<String> names = ['Foo', 'Bar', 'Baz'];
 
 extension RandomElement<T> on Iterable<T> {
   T getRandomElement() => elementAt(math.Random().nextInt(length));
 }
 
 /// Cubit class
-class RandomNameCubit extends Cubit<String?>{
+class RandomNameCubit extends Cubit<String?> {
   /// constructor
   RandomNameCubit() : super(null);
 
@@ -33,7 +28,6 @@ class RandomNameBloc extends StatefulWidget {
 }
 
 class _RandomNameBlocState extends State<RandomNameBloc> {
-
   late final RandomNameCubit nameCubit;
 
   /// Todo: Just did some stream practice
@@ -53,7 +47,6 @@ class _RandomNameBlocState extends State<RandomNameBloc> {
     /// Stream Practice
     // streamController = StreamController.broadcast();
     // stream = streamController.stream;
-
   }
 
   @override
@@ -65,7 +58,6 @@ class _RandomNameBlocState extends State<RandomNameBloc> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Cubit Testing'),
@@ -74,10 +66,12 @@ class _RandomNameBlocState extends State<RandomNameBloc> {
         stream: nameCubit.stream,
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           final button = TextButton(
-              onPressed: () => nameCubit.pickedRandomName(),
-              child: const Text('Get random name'),);
+            onPressed: () => nameCubit.pickedRandomName(),
+            child: const Text('Get random name'),
+          );
+
           /// switch for different connection state
-          switch(snapshot.connectionState){
+          switch (snapshot.connectionState) {
             case ConnectionState.none:
               return Text('No data');
             case ConnectionState.waiting:
@@ -93,7 +87,6 @@ class _RandomNameBlocState extends State<RandomNameBloc> {
               return Text('Done');
           }
         },
-
       ),
     );
   }
