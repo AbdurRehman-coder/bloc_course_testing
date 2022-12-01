@@ -6,6 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+import 'dart:developer' as devtools show log;
+
+extension Log on Object {
+  void log() => devtools.log(toString());
+}
 
 @immutable
 abstract class LoadAction {
@@ -29,9 +35,10 @@ extension UrlString on PersonUrl {
   String get urlString {
     switch (this) {
       case PersonUrl.persons1:
-        return 'http://127.0.0.1:5500/api/persons1.json';
+        // return 'http://127.0.0.1:5500/api/persons1.json';
+        return 'https://jsonplaceholder.typicode.com/users';
       case PersonUrl.persons2:
-        return 'http://127.0.0.1:5500/api/persons2.json';
+        return 'https://jsonplaceholder.typicode.com/users';
     }
   }
 }
@@ -39,21 +46,44 @@ extension UrlString on PersonUrl {
 // Program the Person
 class Person {
   final String name;
-  final int age;
+  final int id;
   // default constructor
   const Person({
     required this.name,
-    required this.age,
+    required this.id,
   });
 // constructor for json
   Person.fromJson(Map<String, dynamic> json)
       : name = json['name'] as String,
-        age = json['age'] as int;
+        id = json['id'] as int;
 }
 
 // now download and parse JSON
 // for this we don't really need to use third party packages like http & dio
 // insteade we will use dart built-in "httpClient"
+// Future<Iterable<Person>> getPersons(String url) async {
+//   print('get person called..');
+//   List<Person> persons = [];
+//   final response = await http.get(Uri.parse(url));
+//   print('http response is: ${response}');
+//   if (response.statusCode == 200) {
+//     var responseBody = response.body;
+//     print('response body: ${responseBody}');
+//     var jsonDecoded = json.decode(responseBody);
+//     List values = jsonDecoded as List;
+//     persons = values
+//         .map(
+//           (e) => Person.fromJson(e),
+//         )
+//         .toList();
+
+//     return persons;
+//   } else {
+//     print('status code error');
+//     return persons;
+//   }
+// }
+
 Future<Iterable<Person>> getPersons(String url) => HttpClient()
     .getUrl(Uri.parse(url))
     .then((req) => req.close())
@@ -151,6 +181,7 @@ class _Step2ExampleState extends State<Step2Example> {
             return previousResult?.persons != currentResult?.persons;
           },
           builder: ((context, fetchResult) {
+            fetchResult?.log();
             final persons = fetchResult?.persons;
             if (persons == null) {
               return const SizedBox();
@@ -161,7 +192,8 @@ class _Step2ExampleState extends State<Step2Example> {
                   itemBuilder: ((context, index) {
                     final person = persons[index];
                     return ListTile(
-                      title: Text(person!.name),
+                      leading: Text(person!.id.toString()),
+                      title: Text(person.name),
                     );
                   }),
                 ),
