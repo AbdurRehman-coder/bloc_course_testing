@@ -60,7 +60,7 @@ class _RandomNameBlocState extends State<RandomNameBloc> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cubit Testing'),
+        title: const Text('Cubit Testing'),
       ),
       body: StreamBuilder<String?>(
         stream: nameCubit.stream,
@@ -73,7 +73,7 @@ class _RandomNameBlocState extends State<RandomNameBloc> {
           /// switch for different connection state
           switch (snapshot.connectionState) {
             case ConnectionState.none:
-              return Text('No data');
+              return const Text('No data');
             case ConnectionState.waiting:
               return button;
             case ConnectionState.active:
@@ -84,7 +84,7 @@ class _RandomNameBlocState extends State<RandomNameBloc> {
                 ],
               );
             case ConnectionState.done:
-              return Text('Done');
+              return const Text('Done');
           }
         },
       ),
